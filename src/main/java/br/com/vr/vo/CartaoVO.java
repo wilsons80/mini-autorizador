@@ -1,8 +1,13 @@
 package br.com.vr.vo;
 
+import javax.validation.constraints.NotNull;
+
 public class CartaoVO {
 	
+	@NotNull(message = "Informe o número do cartão.")
 	private String numeroCartao;
+	
+	@NotNull(message = "Informe a senha do cartão.")
 	private String senha;
 
 	public CartaoVO() {
