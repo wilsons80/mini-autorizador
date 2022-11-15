@@ -1,10 +1,11 @@
-package br.com.vr.controlers;
+package br.com.vr.controller;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,7 +27,7 @@ public class TransacaoController {
 	private TransacaoService transacaoService;
 	
 	@Transactional
-	@PostMapping("")
+	@PostMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<StatusTransacaoEnum> criar(@RequestBody @Valid TransacaoVO transacaoVO) {
 		try {
 			transacaoService.realizarTransacao(transacaoVO);
