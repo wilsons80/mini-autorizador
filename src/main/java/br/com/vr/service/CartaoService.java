@@ -1,7 +1,6 @@
 package br.com.vr.service;
 
 import java.math.BigDecimal;
-import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,17 +22,13 @@ public class CartaoService {
 	@Autowired
 	private CartaoMapper cartaoMapper;
 	
-	private Cartao getCartao(String numeroCartao) {
-		Optional<Cartao> cartao = Optional.ofNullable(cartaoRepository.findByNumeroCartao(numeroCartao));
-		return cartao.orElseThrow(() -> new CartaoNaoExisteException(String.format("O cartão %s não existe na base de dados.", numeroCartao)));
+	public Optional<Cartao> getCartao(String numeroCartao) {
+		return Optional.ofNullable(cartaoRepository.findByNumeroCartao(numeroCartao));		
 	}
 
 	public CartaoVO criar(CartaoVO cartaoVo) {
-		
-		Cartao cartaoExiste = cartaoRepository.findByNumeroCartao(cartaoVo.getNumeroCartao());
-		if(Objects.nonNull(cartaoExiste)) {
-			throw new CartaoJaExisteException(String.format("O cartão %s já está cadastrado.", cartaoVo.getNumeroCartao())); 
-		}
+		Optional<Cartao> cartaoOpt = Optional.ofNullable(cartaoRepository.findByNumeroCartao(cartaoVo.getNumeroCartao()));
+		cartaoOpt.ifPresent((cartao) -> {throw new CartaoJaExisteException(String.format("O cartão %s já está cadastrado.", cartaoVo.getNumeroCartao()));});
 				
 		Cartao entity = cartaoMapper.toEntity(cartaoVo);
 		entity.setSaldo(new BigDecimal(500.00));
@@ -43,7 +38,8 @@ public class CartaoService {
 	
 	
 	public BigDecimal getSaldoCartao(String numeroCartao) {
-		Cartao cartao = getCartao(numeroCartao);
+		Optional<Cartao> cartaoOpt = getCartao(numeroCartao);
+		Cartao cartao = cartaoOpt.orElseThrow(() -> new CartaoNaoExisteException(String.format("O cartão %s não existe na base de dados.", numeroCartao)));
 		return cartao.getSaldo();
 	}
 }
