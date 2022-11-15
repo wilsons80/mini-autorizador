@@ -1,4 +1,4 @@
-package br.com.vr.entitys;
+package br.com.vr.entity;
 
 import java.math.BigDecimal;
 

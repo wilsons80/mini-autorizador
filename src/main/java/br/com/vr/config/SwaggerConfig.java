@@ -29,7 +29,7 @@ public class SwaggerConfig  {
 	private ApiInfo getApiInfo() {
         return new ApiInfoBuilder()
                 .title("Mini Autorizador - VR")
-                .description("Autorizador de transações vale alimentação e refeição")
+                .description("Autorizador de transações para cartões Vale Alimentação e Vale Refeição")
                 .version("1.0.0")
                 .build();
     }

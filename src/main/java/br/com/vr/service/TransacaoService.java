@@ -7,11 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.vr.core.StatusTransacaoEnum;
-import br.com.vr.entitys.Cartao;
+import br.com.vr.entity.Cartao;
+import br.com.vr.entity.repository.CartaoRepository;
 import br.com.vr.exception.CartaoNaoExisteException;
 import br.com.vr.exception.SaldoInsuficienteException;
 import br.com.vr.exception.SenhaInvalidaException;
-import br.com.vr.repository.CartaoRepository;
 import br.com.vr.vo.TransacaoVO;
 
 @Service

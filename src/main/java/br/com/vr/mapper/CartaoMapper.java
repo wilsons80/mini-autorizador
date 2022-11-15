@@ -1,4 +1,4 @@
-package br.com.vr.build;
+package br.com.vr.mapper;
 
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
-import br.com.vr.entitys.Cartao;
+import br.com.vr.entity.Cartao;
 import br.com.vr.vo.CartaoVO;
 
 @Component

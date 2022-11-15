@@ -30,12 +30,12 @@ public class CartaoController {
 	
 	@Transactional
 	@PostMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<CartaoVO> criar(@RequestBody @Valid CartaoVO cartaoVo) {
+	public ResponseEntity<CartaoVO> criarCartao(@RequestBody @Valid CartaoVO cartaoVO) {
 		try {
-			CartaoVO novo = cartaoService.criar(cartaoVo);
+			CartaoVO novo = cartaoService.criar(cartaoVO);
 			return new ResponseEntity<>(novo, HttpStatus.CREATED);
 		} catch (CartaoJaExisteException e) {
-			return new ResponseEntity<CartaoVO>(cartaoVo, HttpStatus.UNPROCESSABLE_ENTITY);
+			return new ResponseEntity<CartaoVO>(cartaoVO, HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 	}
 	
