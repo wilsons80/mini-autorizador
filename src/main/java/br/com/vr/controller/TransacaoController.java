@@ -28,7 +28,7 @@ public class TransacaoController {
 	
 	@Transactional
 	@PostMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<StatusTransacaoEnum> criar(@RequestBody @Valid TransacaoVO transacaoVO) {
+	public ResponseEntity<StatusTransacaoEnum> realizarTransacao(@RequestBody @Valid TransacaoVO transacaoVO) {
 		try {
 			transacaoService.realizarTransacao(transacaoVO);
 			return new ResponseEntity<>(StatusTransacaoEnum.OK, HttpStatus.CREATED);
