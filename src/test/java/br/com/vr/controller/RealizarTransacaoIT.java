@@ -1,7 +1,6 @@
 package br.com.vr.controller;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.equalTo;
 
 import java.math.BigDecimal;
 
@@ -23,7 +22,7 @@ import io.restassured.http.ContentType;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("/application-test.properties")
-public class ConsultarTransacaoIT {
+public class RealizarTransacaoIT {
 	
 	@LocalServerPort
 	private int port;
@@ -35,10 +34,10 @@ public class ConsultarTransacaoIT {
 	
 	
 	private Cartao cartao;
-	private String jsonTransacao;
-	private String jsonTransacaoSaldoInsuficiente;
-	private String jsonTransacaoSenhaInvalida;
-	private String transacaoCartaoInexistente;
+	private String jsonTransacaoCartao_Inexistente;
+	private String jsonTransacaoCartao_SaldoInsuficiente;
+	private String jsonTransacaoCartao_SenhaInvalida;
+	private String jsonTransacaoCartao_ResuldadoOK;
 	
 	
 	@BeforeEach
@@ -47,74 +46,78 @@ public class ConsultarTransacaoIT {
 		RestAssured.port = port;
 		RestAssured.basePath = "/transacoes";
 
-		jsonTransacao                   = ResourceUtils.getContentFromResource("/json/transacao/transacao_cartao.json");
-		jsonTransacaoSaldoInsuficiente  = ResourceUtils.getContentFromResource("/json/transacao/transacao_cartao_saldo_insuficiente.json");
-		jsonTransacaoSenhaInvalida      = ResourceUtils.getContentFromResource("/json/transacao/transacao_cartao_senha_invalida.json");
-		transacaoCartaoInexistente      = ResourceUtils.getContentFromResource("/json/transacao/transacao_cartao_inexistente.json");
+		jsonTransacaoCartao_Inexistente       = ResourceUtils.getContentFromResource("/json/transacao/transacao_cartao_inexistente.json");
+		jsonTransacaoCartao_SaldoInsuficiente = ResourceUtils.getContentFromResource("/json/transacao/transacao_cartao_saldo_insuficiente.json");
+		jsonTransacaoCartao_SenhaInvalida     = ResourceUtils.getContentFromResource("/json/transacao/transacao_cartao_senha_invalida.json");
+		jsonTransacaoCartao_ResuldadoOK       = ResourceUtils.getContentFromResource("/json/transacao/transacao_cartao.json");
 		
 		databaseCleaner.clearTables();
 		prepararDados();
 	}
 	
-	@Test
-	public void deveRetornarStatus201_QuandoRetornaSaldoCartao() {
-		given()
-			.body(jsonTransacao)
-			.contentType(ContentType.JSON)
-			.accept(ContentType.JSON)
-		.when()
-			.post()
-		.then()
-			.statusCode(HttpStatus.CREATED.value())
-			.body("", equalTo(StatusTransacaoEnum.OK));
-	}	
 	
 	@Test
-	public void deveRetornarStatus422_QuandoRetornaSaldoInsuficiente() {
+	public void deveRetornarStatus201_QuandoTransacaoRealizadaComSucesso() {
 		given()
-			.body(jsonTransacaoSaldoInsuficiente)
+			.body(jsonTransacaoCartao_ResuldadoOK)
 			.contentType(ContentType.JSON)
 			.accept(ContentType.JSON)
 		.when()
 			.post()
 		.then()
-			.statusCode(HttpStatus.UNPROCESSABLE_ENTITY.value())
-			.body("", equalTo(StatusTransacaoEnum.SALDO_INSUFICIENTE));
-	}	
-
-	@Test
-	public void deveRetornarStatus422_QuandoRetornaSenhaInvalida() {
-		given()
-			.body(jsonTransacaoSenhaInvalida)
-			.contentType(ContentType.JSON)
-			.accept(ContentType.JSON)
-		.when()
-			.post()
-		.then()
-			.statusCode(HttpStatus.UNPROCESSABLE_ENTITY.value())
-			.body("", equalTo(StatusTransacaoEnum.SENHA_INVALIDA));
+		.statusCode(HttpStatus.CREATED.value())
+		.assertThat().equals(StatusTransacaoEnum.OK);
 	}
 	
 	
 	@Test
-	public void deveRetornarStatus422_QuandoRetornaCartaoInexistente() {
+	public void deveRetornarStatus422_QuandoTransacaoRealizadaComSaldoInsuficiente() {
 		given()
-			.body(transacaoCartaoInexistente)
+			.body(jsonTransacaoCartao_SaldoInsuficiente)
 			.contentType(ContentType.JSON)
 			.accept(ContentType.JSON)
 		.when()
 			.post()
 		.then()
-			.statusCode(HttpStatus.UNPROCESSABLE_ENTITY.value())
-			.body("", equalTo(StatusTransacaoEnum.CARTAO_INEXISTENTE));
+		.statusCode(HttpStatus.UNPROCESSABLE_ENTITY.value())
+		.assertThat().equals(StatusTransacaoEnum.SALDO_INSUFICIENTE);
 	}
 	
 	
+	@Test
+	public void deveRetornarStatus422_QuandoTransacaoRealizadaComSenhaInvalida() {
+		given()
+			.body(jsonTransacaoCartao_SenhaInvalida)
+			.contentType(ContentType.JSON)
+			.accept(ContentType.JSON)
+		.when()
+			.post()
+		.then()
+		.statusCode(HttpStatus.UNPROCESSABLE_ENTITY.value())
+		.assertThat().equals(StatusTransacaoEnum.SENHA_INVALIDA);
+	}
+	
+	
+	@Test
+	public void deveRetornarStatus422_QuandoTransacaoRealizadaComCartaoInexistente() {
+		given()
+			.body(jsonTransacaoCartao_Inexistente)
+			.contentType(ContentType.JSON)
+			.accept(ContentType.JSON)
+		.when()
+			.post()
+		.then()
+		.statusCode(HttpStatus.UNPROCESSABLE_ENTITY.value())
+		.assertThat().equals(StatusTransacaoEnum.CARTAO_INEXISTENTE);
+	}
+	
+		
 	private void prepararDados() {
 		cartao = new Cartao();
-		cartao.setNumeroCartao("6549873025634502");
-		cartao.setSenha("123");
+		cartao.setNumeroCartao("2223334445556666");
+		cartao.setSenha("1234");
 		cartao.setSaldo(BigDecimal.valueOf(500));
 		cartaoRepository.save(cartao);
 	}
 }
+

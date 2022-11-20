@@ -14,11 +14,11 @@ import javax.persistence.Table;
 public class Cartao {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "codigo")
 	private BigDecimal id;
 	
-	@Column(name = "numeroCartao")
+	@Column(name = "numero_cartao")
 	private String numeroCartao;
 	
 	@Column(name = "senha")
@@ -29,10 +29,6 @@ public class Cartao {
 
 	public BigDecimal getId() {
 		return id;
-	}
-
-	public void setId(BigDecimal id) {
-		this.id = id;
 	}
 
 	public String getNumeroCartao() {

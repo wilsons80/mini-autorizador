@@ -1,7 +1,8 @@
 create table cartao (
-  id number not null auto_increment,
-  numeroCartao varchar(16) not null,
+  codigo bigint not null auto_increment,
+  numero_cartao varchar(16) not null,
+  saldo numeric(10,2) not null,
   senha varchar(6) not null,
   
-  primary key (id)
+  primary key (codigo)
 ) engine=InnoDB default charset=utf8;

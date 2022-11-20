@@ -28,7 +28,6 @@ public class CartaoMapper {
 		PropertyMap<CartaoVO, Cartao> cartaoMap = new PropertyMap<CartaoVO, Cartao>() {
 			@Override
 			protected void configure() {
-				map().setId(null);
 				map().setNumeroCartao(source.getNumeroCartao());
 				map().setSenha(source.getSenha());
 			}

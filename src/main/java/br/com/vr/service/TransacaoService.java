@@ -24,7 +24,7 @@ public class TransacaoService {
 		Optional<Cartao> cartaoOpt = Optional.ofNullable(cartaoRepository.findByNumeroCartao(transacaoVO.getNumeroCartao()));
 		Cartao cartao = cartaoOpt.orElseThrow(() -> new CartaoNaoExisteException(StatusTransacaoEnum.CARTAO_INEXISTENTE.toString()));
 		
-		Stream.of(cartao).filter(c -> c.getSaldo().doubleValue() <= transacaoVO.getValor().doubleValue())
+		Stream.of(cartao).filter(c -> c.getSaldo().doubleValue() < transacaoVO.getValor().doubleValue())
 		                 .findAny().ifPresent((c) -> { throw new SaldoInsuficienteException(StatusTransacaoEnum.SALDO_INSUFICIENTE.toString());});
 
 		Stream.of(cartao).filter(c -> !c.getSenha().equals(transacaoVO.getSenhaCartao()))

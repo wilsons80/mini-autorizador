@@ -1,7 +1,6 @@
 package br.com.vr.controller;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.equalTo;
 
 import java.math.BigDecimal;
 
@@ -60,7 +59,7 @@ public class ConsultarCartaoIT {
 			.get("/{numeroCartao}")
 		.then()
 			.statusCode(HttpStatus.OK.value())
-			.body("", equalTo(BigDecimal.valueOf(500)));
+			.assertThat().equals(BigDecimal.valueOf(500));
 	}
 	
 	@Test
@@ -97,7 +96,7 @@ public class ConsultarCartaoIT {
 		.when()
 			.post()
 		.then()
-			.statusCode(HttpStatus.CREATED.value());
+			.statusCode(HttpStatus.UNPROCESSABLE_ENTITY.value());
 	}
 	
 	private void prepararDados() {

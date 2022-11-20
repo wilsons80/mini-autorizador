@@ -21,7 +21,7 @@ import br.com.vr.vo.TransacaoVO;
 
 @RestController
 @RequestMapping(value = "/transacoes")
-public class TransacaoController {
+public class RealizarTransacaoController {
 
 	@Autowired
 	private TransacaoService transacaoService;
